@@ -6,6 +6,9 @@
   * ```ping, ifconfig, hostname, ps, df, du``` and so on
   * at least during dev/test
   * they seem aware that developers are on OS X or Linux
+* network setup info:
+  * [nerves_system_qemu_arm](https://github.com/nerves-project/nerves_system_qemu_arm)
+  * [setup-nat-network-for-qemu-macosx](https://blog.san-ss.com.ar/2016/04/setup-nat-network-for-qemu-macosx)
 
 ***
 
