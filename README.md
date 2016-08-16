@@ -5,6 +5,7 @@
 * it sure would be nice if Nerves left these applets in Busybox:
   * ```ping, ifconfig, hostname, ps, df, du``` and so on
   * at least during dev/test
+  * they seem aware that developers are on OS X or Linux
 
 ***
 
