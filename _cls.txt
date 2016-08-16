@@ -19,7 +19,7 @@ sudo pfctl -f qemu-pf.conf     # load NAT rules for bridge1
 brew install dnsmasq
 curl -OL https://github.com/nerves-project/nerves_system_qemu_arm/raw/develop/qemu-dnsmasq.conf
 ... works on os x el capitan version 10.11.6:
-dnsmasq --conf-file=qemu-dnsmasq.conf  # daemonizes into the background
+sudo dnsmasq --conf-file=qemu-dnsmasq.conf  # daemonizes into the background
   ... ignore this trial/error on macbook:
   sudo /usr/local/sbin/dnsmasq --conf-file=qemu-dnsmasq.conf
   sudo cp qemu-dnsmasq.conf /usr/local/etc/dnsmasq.conf
