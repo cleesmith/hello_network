@@ -1,5 +1,10 @@
-# Aug 15, 2016:
+### Aug 15, 2016:
 * not working on MacBook Pro OS X version 10.9.5
+* try another Mac
+* why is QEMU always a pain ?
+* it sure would be nice if Nerves left these applets in Busybox:
+  * ```ping, ifconfig, hostname, ps, df, du``` and so on
+  * at least during dev/test
 
 ***
 
