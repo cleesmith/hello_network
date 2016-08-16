@@ -1,3 +1,8 @@
+# Aug 15, 2016:
+* not working on MacBook Pro OS X version 10.9.5
+
+***
+
 # HelloNetwork
 
 Configures the primary network interface using [DHCP] and announces itself
