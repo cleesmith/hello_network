@@ -34,10 +34,10 @@ sudo /bin/launchctl unload -w /System/Library/LaunchDaemons/bootps.plist
 nano -w /System/Library/LaunchDaemons/bootps.plist ... ensure the Disabled key is set to True
 sudo launchctl list
 
-... now, build and try it:
 curl -OL https://github.com/nerves-project/nerves_system_qemu_arm/raw/develop/qemu-ifup.sh
 curl -OL https://github.com/nerves-project/nerves_system_qemu_arm/raw/develop/qemu-ifdown.sh
 
+... now, build and try it:
 NERVES_TARGET=qemu_arm mix deps.get
 NERVES_TARGET=qemu_arm mix firmware
 
@@ -57,4 +57,30 @@ iex(1)> HelloNetwork.test_dns
 {:ok,
  {:hostent, 'nerves-project.org', [], :inet, 4,
   [{192, 30, 252, 154}, {192, 30, 252, 153}]}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
