@@ -27,11 +27,12 @@ sudo dnsmasq --conf-file=qemu-dnsmasq.conf  # daemonizes into the background
   sudo brew services start dnsmasq --conf-file=qemu-dnsmasq.conf
   sudo brew services stop dnsmasq
   sudo brew services stop list
-... manually disable the DHCP server:
-sudo /bin/launchctl unload -w /System/Library/LaunchDaemons/bootps.plist
-... check the /System/Library/LaunchDaemons/bootps.plist file and make sure the Disabled key is set to True
-sudo launchctl list
+* note: bootpd was running on port 67 ... why?
 sudo netstat -an | grep 67 ... check for dhcp server on udp port 67
+... so, to manually disable bootpd (a DHCP server):
+sudo /bin/launchctl unload -w /System/Library/LaunchDaemons/bootps.plist
+nano -w /System/Library/LaunchDaemons/bootps.plist ... ensure the Disabled key is set to True
+sudo launchctl list
 
 ... now, build and try it:
 curl -OL https://github.com/nerves-project/nerves_system_qemu_arm/raw/develop/qemu-ifup.sh
