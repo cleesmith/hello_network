@@ -18,16 +18,20 @@ sudo pfctl -f qemu-pf.conf     # load NAT rules for bridge1
 4. DHCP configuration
 brew install dnsmasq
 curl -OL https://github.com/nerves-project/nerves_system_qemu_arm/raw/develop/qemu-dnsmasq.conf
-... didn't work:
+... works on os x el capitan version 10.11.6:
 dnsmasq --conf-file=qemu-dnsmasq.conf  # daemonizes into the background
-... nor:
-sudo /usr/local/sbin/dnsmasq --conf-file=qemu-dnsmasq.conf
-... maybe works:
-sudo cp qemu-dnsmasq.conf /usr/local/etc/dnsmasq.conf
-sudo nano -w /usr/local/etc/dnsmasq.conf
-sudo brew services start dnsmasq --conf-file=qemu-dnsmasq.conf
-sudo brew services stop dnsmasq
-sudo brew services stop list
+  ... ignore this trial/error on macbook:
+  sudo /usr/local/sbin/dnsmasq --conf-file=qemu-dnsmasq.conf
+  sudo cp qemu-dnsmasq.conf /usr/local/etc/dnsmasq.conf
+  sudo nano -w /usr/local/etc/dnsmasq.conf
+  sudo brew services start dnsmasq --conf-file=qemu-dnsmasq.conf
+  sudo brew services stop dnsmasq
+  sudo brew services stop list
+... manually disable the DHCP server:
+sudo /bin/launchctl unload -w /System/Library/LaunchDaemons/bootps.plist
+... check the /System/Library/LaunchDaemons/bootps.plist file and make sure the Disabled key is set to True
+sudo launchctl list
+sudo netstat -an | grep 67 ... check for dhcp server on udp port 67
 
 ... now, build and try it:
 curl -OL https://github.com/nerves-project/nerves_system_qemu_arm/raw/develop/qemu-ifup.sh
@@ -46,7 +50,7 @@ sudo qemu-system-arm -M vexpress-a9 -smp 1 -m 256                    \
     -net nic,model=lan9118                                             \
     -net tap,ifname=tap0,script=qemu-ifup.sh,downscript=qemu-ifdown.sh
 
-Once booted up into the IEX console, you can verify that 
+Once booted up into the IEX console, you can verify that
 network connectivity and DNS name resolution works by typing in:
 iex(1)> HelloNetwork.test_dns
 {:ok,

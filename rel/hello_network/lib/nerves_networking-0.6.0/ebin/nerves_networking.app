@@ -1,0 +1,10 @@
+{application,nerves_networking,
+             [{registered,[]},
+              {description,"Nerves Networking Module"},
+              {vsn,"0.6.0"},
+              {modules,['Elixir.Nerves.Networking',
+                        'Elixir.Nerves.Networking.Helpers',
+                        'Elixir.Nerves.Networking.Server',
+                        'Elixir.Nerves.Networking.Subsystem']},
+              {applications,[kernel,stdlib,elixir,logger,crypto]},
+              {mod,{'Elixir.Nerves.Networking',[]}}]}.
