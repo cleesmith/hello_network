@@ -1,0 +1,55 @@
+Aug 15, 2016:
+1. TunTap drivers
+sudo brew cask install tuntap
+sudo launchctl load /Library/LaunchDaemons/net.sf.tuntaposx.tap.plist
+sudo launchctl load /Library/LaunchDaemons/net.sf.tuntaposx.tun.plist
+
+2. Bridge interface
+sudo ifconfig bridge1 create
+sudo ifconfig bridge1 addm en0
+sudo ifconfig bridge1 192.168.100.1/24
+
+3. Packet forwarding and NAT
+curl -OL https://github.com/nerves-project/nerves_system_qemu_arm/raw/develop/qemu-pf.conf
+sudo sysctl -w net.inet.ip.forwarding=1
+sudo pfctl -F all              # flush existing rules
+sudo pfctl -f qemu-pf.conf     # load NAT rules for bridge1
+
+4. DHCP configuration
+brew install dnsmasq
+curl -OL https://github.com/nerves-project/nerves_system_qemu_arm/raw/develop/qemu-dnsmasq.conf
+... didn't work:
+dnsmasq --conf-file=qemu-dnsmasq.conf  # daemonizes into the background
+... nor:
+sudo /usr/local/sbin/dnsmasq --conf-file=qemu-dnsmasq.conf
+... maybe works:
+sudo cp qemu-dnsmasq.conf /usr/local/etc/dnsmasq.conf
+sudo nano -w /usr/local/etc/dnsmasq.conf
+sudo brew services start dnsmasq --conf-file=qemu-dnsmasq.conf
+sudo brew services stop dnsmasq
+sudo brew services stop list
+
+... now, build and try it:
+curl -OL https://github.com/nerves-project/nerves_system_qemu_arm/raw/develop/qemu-ifup.sh
+curl -OL https://github.com/nerves-project/nerves_system_qemu_arm/raw/develop/qemu-ifdown.sh
+
+NERVES_TARGET=qemu_arm mix deps.get
+NERVES_TARGET=qemu_arm mix firmware
+
+fwup -a -d _images/qemu_arm/hello_network.img -i _images/qemu_arm/hello_network.fw -t complete
+
+sudo qemu-system-arm -M vexpress-a9 -smp 1 -m 256                    \
+    -kernel _build/qemu_arm/dev/nerves/system/images/zImage            \
+    -dtb _build/qemu_arm/dev/nerves/system/images/vexpress-v2p-ca9.dtb \
+    -drive file=_images/qemu_arm/hello_network.img,if=sd,format=raw    \
+    -append "console=ttyAMA0,115200 root=/dev/mmcblk0p2" -serial stdio \
+    -net nic,model=lan9118                                             \
+    -net tap,ifname=tap0,script=qemu-ifup.sh,downscript=qemu-ifdown.sh
+
+Once booted up into the IEX console, you can verify that 
+network connectivity and DNS name resolution works by typing in:
+iex(1)> HelloNetwork.test_dns
+{:ok,
+ {:hostent, 'nerves-project.org', [], :inet, 4,
+  [{192, 30, 252, 154}, {192, 30, 252, 153}]}}
+
